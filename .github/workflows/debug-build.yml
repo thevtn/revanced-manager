@@ -1,6 +1,7 @@
 name: "Debug Build"
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "master"
