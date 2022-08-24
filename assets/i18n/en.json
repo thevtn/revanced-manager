@@ -55,12 +55,12 @@
     },
     "patchesSelectorView": {
         "searchBarHint": "Search patches",
-        "fabButton": "Done"
+        "doneButton": "Done"
     },
     "installerView": {
         "widgetTitle": "Installer",
-        "fabInstallButton": "Install",
-        "fabOpenButton": "Open",
+        "installButton": "Install",
+        "openButton": "Open",
         "notificationTitle": "ReVanced Manager is patching",
         "notificationText": "Tap to return to the installer"
     },
