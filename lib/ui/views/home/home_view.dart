@@ -17,7 +17,6 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       disposeViewModel: false,
-      fireOnModelReadyOnce: true,
       onModelReady: (model) => model.initialize(),
       viewModelBuilder: () => locator<HomeViewModel>(),
       builder: (context, model, child) => Scaffold(
@@ -74,7 +73,6 @@ class HomeView extends StatelessWidget {
                     const SizedBox(height: 10),
                     LatestCommitCard(
                       onPressed: () => model.updateManager(context),
-                      color: Theme.of(context).colorScheme.primary,
                     ),
                     const SizedBox(height: 23),
                     I18nText(
@@ -93,7 +91,7 @@ class HomeView extends StatelessWidget {
                     Row(
                       children: [
                         DashboardChip(
-                          label: "homeView.updatesAvailable",
+                          label: 'homeView.updatesAvailable',
                           isSelected: model.showUpdatableApps,
                           onSelected: (value) {
                             model.toggleUpdatableApps(true);
@@ -101,7 +99,7 @@ class HomeView extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         DashboardChip(
-                          label: "homeView.installed",
+                          label: 'homeView.installed',
                           isSelected: !model.showUpdatableApps,
                           onSelected: (value) {
                             model.toggleUpdatableApps(false);
@@ -112,7 +110,7 @@ class HomeView extends StatelessWidget {
                     const SizedBox(height: 14),
                     model.showUpdatableApps
                         ? AvailableUpdatesCard()
-                        : InstalledAppsCard()
+                        : InstalledAppsCard(),
                   ],
                 ),
               ),

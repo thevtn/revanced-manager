@@ -12,36 +12,32 @@ class ContributorsView extends StatelessWidget {
       viewModelBuilder: () => ContributorsViewModel(),
       onModelReady: (model) => model.getContributors(),
       builder: (context, model, child) => Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => model.getContributors(),
-          child: const Icon(Icons.refresh),
-        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 ContributorsCard(
-                  title: "Patcher Contributors",
+                  title: 'Patcher Contributors',
                   contributors: model.patcherContributors,
                   height: 60,
                 ),
                 ContributorsCard(
-                  title: "Patches Contributors",
+                  title: 'Patches Contributors',
                   contributors: model.patchesContributors,
                   height: 230,
                 ),
                 ContributorsCard(
-                  title: "Integrations Contributors",
+                  title: 'Integrations Contributors',
                   contributors: model.integrationsContributors,
                   height: 230,
                 ),
                 ContributorsCard(
-                  title: "CLI Contributors",
+                  title: 'CLI Contributors',
                   contributors: model.cliContributors,
                   height: 180,
                 ),
                 ContributorsCard(
-                  title: "Manager Contributors",
+                  title: 'Manager Contributors',
                   contributors: model.managerContributors,
                   height: 130,
                 ),

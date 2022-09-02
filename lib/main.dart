@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 // ignore: depend_on_referenced_packages
@@ -6,6 +7,7 @@ import 'package:revanced_manager/app/app.locator.dart';
 import 'package:revanced_manager/app/app.router.dart';
 import 'package:revanced_manager/main_viewmodel.dart';
 import 'package:revanced_manager/services/manager_api.dart';
+import 'package:revanced_manager/services/patcher_api.dart';
 import 'package:revanced_manager/theme.dart';
 import 'package:revanced_manager/ui/views/home/home_view.dart';
 import 'package:revanced_manager/ui/views/patcher/patcher_view.dart';
@@ -69,6 +71,7 @@ class MyApp extends StatelessWidget {
 
   Future<Widget> _init() async {
     await locator<ManagerAPI>().initialize();
+    await locator<PatcherAPI>().initialize();
     bool? isRooted = locator<ManagerAPI>().isRooted();
     if (isRooted != null) {
       return const Navigation();
@@ -78,16 +81,29 @@ class MyApp extends StatelessWidget {
 }
 
 class Navigation extends StatelessWidget {
-  const Navigation({
-    Key? key,
-  }) : super(key: key);
+  const Navigation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
       viewModelBuilder: () => locator<MainViewModel>(),
       builder: (context, model, child) => Scaffold(
-        body: getViewForIndex(model.currentIndex),
+        body: PageTransitionSwitcher(
+          duration: const Duration(milliseconds: 400),
+          transitionBuilder: (
+            Widget child,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) {
+            return FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              fillColor: Theme.of(context).colorScheme.surface,
+              child: child,
+            );
+          },
+          child: getViewForIndex(model.currentIndex),
+        ),
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: model.setIndex,
           selectedIndex: model.currentIndex,

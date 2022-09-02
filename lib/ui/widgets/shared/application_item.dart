@@ -12,7 +12,7 @@ class ApplicationItem extends StatelessWidget {
   final Uint8List icon;
   final String name;
   final DateTime patchDate;
-  final String changelog;
+  final List<String> changelog;
   final bool isUpdatableApp;
   final Function() onPressed;
 
@@ -36,9 +36,7 @@ class ApplicationItem extends StatelessWidget {
       header: Container(
         height: 60,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(16),
-          ),
+          borderRadius: BorderRadius.circular(12),
           color: Theme.of(context).colorScheme.primary,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
@@ -90,7 +88,7 @@ class ApplicationItem extends StatelessWidget {
           ],
         ),
       ),
-      collapsed: const Text(""),
+      collapsed: const Text(''),
       expanded: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Column(
@@ -103,8 +101,9 @@ class ApplicationItem extends StatelessWidget {
                 style: kRobotoTextStyle.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
+            const SizedBox(height: 4),
             Text(
-              changelog,
+              '\u2022 ${changelog.join('\n\u2022 ')}',
               style: kRobotoTextStyle,
             ),
           ],

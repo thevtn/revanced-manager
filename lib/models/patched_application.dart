@@ -6,19 +6,21 @@ part 'patched_application.g.dart';
 
 @JsonSerializable()
 class PatchedApplication {
-  final String name;
+  String name;
   final String packageName;
-  final String version;
+  String version;
   final String apkFilePath;
   @JsonKey(
     fromJson: decodeBase64,
     toJson: encodeBase64,
   )
-  final Uint8List icon;
+  Uint8List icon;
   DateTime patchDate;
   final bool isRooted;
   final bool isFromStorage;
+  bool hasUpdates;
   List<String> appliedPatches;
+  List<String> changelog;
 
   PatchedApplication({
     required this.name,
@@ -27,15 +29,17 @@ class PatchedApplication {
     required this.apkFilePath,
     required this.icon,
     required this.patchDate,
-    required this.isRooted,
-    required this.isFromStorage,
-    required this.appliedPatches,
+    this.isRooted = false,
+    this.isFromStorage = false,
+    this.hasUpdates = false,
+    this.appliedPatches = const [],
+    this.changelog = const [],
   });
 
   factory PatchedApplication.fromJson(Map<String, dynamic> json) =>
       _$PatchedApplicationFromJson(json);
 
-  Map toJson() => _$PatchedApplicationToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedApplicationToJson(this);
 
   static Uint8List decodeBase64(String icon) => base64.decode(icon);
 

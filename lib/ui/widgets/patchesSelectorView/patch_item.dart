@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:revanced_manager/ui/widgets/shared/patch_text_button.dart';
 
 // ignore: must_be_immutable
 class PatchItem extends StatefulWidget {
@@ -7,6 +9,9 @@ class PatchItem extends StatefulWidget {
   final String simpleName;
   final String description;
   final String version;
+  final String packageVersion;
+  final List<String> supportedPackageVersions;
+  final bool isUnsupported;
   bool isSelected;
   final Function(bool) onChanged;
 
@@ -16,6 +21,9 @@ class PatchItem extends StatefulWidget {
     required this.simpleName,
     required this.description,
     required this.version,
+    required this.packageVersion,
+    required this.supportedPackageVersions,
+    required this.isUnsupported,
     required this.isSelected,
     required this.onChanged,
   }) : super(key: key);
@@ -79,7 +87,7 @@ class _PatchItemState extends State<PatchItem> {
                   scale: 1.2,
                   child: Checkbox(
                     value: widget.isSelected,
-                    activeColor: Colors.blueGrey[500],
+                    activeColor: Theme.of(context).colorScheme.secondary,
                     onChanged: (newValue) {
                       setState(() => widget.isSelected = newValue!);
                       widget.onChanged(widget.isSelected);
@@ -87,9 +95,67 @@ class _PatchItemState extends State<PatchItem> {
                   ),
                 )
               ],
-            )
+            ),
+            widget.isUnsupported
+                ? Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: TextButton.icon(
+                          label: I18nText('patchItem.unsupportedWarningButton'),
+                          icon: const Icon(Icons.warning),
+                          onPressed: () => _showUnsupportedWarningDialog(),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Colors.transparent,
+                            ),
+                            foregroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> _showUnsupportedWarningDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: I18nText('patchItem.alertDialogTitle'),
+        content: I18nText(
+          'patchItem.alertDialogText',
+          translationParams: {
+            'packageVersion': widget.packageVersion,
+            'supportedVersions':
+                '\u2022 ${widget.supportedPackageVersions.join('\n\u2022 ')}',
+          },
+        ),
+        actions: [
+          PatchTextButton(
+            text: FlutterI18n.translate(context, 'okButton'),
+            onPressed: () => Navigator.of(context).pop(),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            borderColor: Theme.of(context).colorScheme.secondary,
+          )
+        ],
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
     );
   }

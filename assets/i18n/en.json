@@ -1,4 +1,5 @@
 {
+    "okButton": "OK",
     "main": {
         "dashboardTab": "Dashboard",
         "patcherTab": "Patcher",
@@ -9,6 +10,8 @@
         "updatesSubtitle": "Updates",
         "patchedSubtitle": "Patched Applications",
         "updatesAvailable": "Updates Available",
+        "noUpdates": "No updates available",
+        "noInstallations": "No patched apps installed",
         "installed": "Installed",
         "notificationTitle": "ReVanced Manager was updated!",
         "notificationText": "Tap to open the app",
@@ -31,7 +34,7 @@
     },
     "patcherView": {
         "widgetTitle": "Patcher",
-        "fabButton": "Patch"
+        "patchButton": "Patch"
     },
     "appSelectorCard": {
         "widgetTitle": "Select application",
@@ -50,17 +53,23 @@
     },
     "appSelectorView": {
         "searchBarHint": "Search applications",
-        "fabButton": "Storage",
+        "storageButton": "Storage",
         "errorMessage": "Unable to use selected application."
     },
     "patchesSelectorView": {
         "searchBarHint": "Search patches",
         "doneButton": "Done"
     },
+    "patchItem": {
+        "unsupportedWarningButton": "Unsupported version",
+        "alertDialogTitle": "Warning",
+        "alertDialogText": "Selecting this patch may or may not result in patching errors.\n\nApp version: {packageVersion}\nCurrent supported versions:\n{supportedVersions}"
+    },
     "installerView": {
         "widgetTitle": "Installer",
         "installButton": "Install",
         "openButton": "Open",
+        "shareButton": "Share file",
         "notificationTitle": "ReVanced Manager is patching",
         "notificationText": "Tap to return to the installer"
     },
@@ -84,6 +93,7 @@
         "widgetTitle": "Is your device rooted?",
         "widgetDescription": "Don't know what this means or prefer to use non-root version? Just click on the button below!",
         "grantPermission": "Grant Root Permission",
-        "grantedPermission": "Magisk permission granted: {isRooted}"
+        "grantedPermission": "Magisk permission granted: {isRooted}",
+        "nonRootButton": "Nonroot"
     }
 }

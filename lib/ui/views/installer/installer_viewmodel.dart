@@ -70,10 +70,10 @@ class InstallerViewModel extends BaseViewModel {
 
   void update(double value, String header, String log) {
     progress = value;
-    isInstalled = false;
     isPatching = progress == 1.0 ? false : true;
     if (progress == 0.0) {
       logs = '';
+      isInstalled = false;
     }
     if (header.isNotEmpty) {
       headerLogs = header;
@@ -108,22 +108,7 @@ class InstallerViewModel extends BaseViewModel {
           }
         }
         update(0.0, '', 'Creating working directory');
-        bool mergeIntegrations = false;
-        bool resourcePatching = false;
-        if (_app!.packageName == 'com.google.android.youtube') {
-          mergeIntegrations = true;
-          resourcePatching = true;
-        } else if (_app!.packageName ==
-            'com.google.android.apps.youtube.music') {
-          resourcePatching = true;
-        }
-        await _patcherAPI.mergeIntegrations(mergeIntegrations);
-        await _patcherAPI.runPatcher(
-          apkFilePath,
-          _patches,
-          mergeIntegrations,
-          resourcePatching,
-        );
+        await _patcherAPI.runPatcher(_app!.packageName, apkFilePath, _patches);
       } on Exception {
         update(1.0, 'Aborting...', 'An error occurred! Aborting');
       }
@@ -148,10 +133,10 @@ class InstallerViewModel extends BaseViewModel {
       );
       isInstalled = await _patcherAPI.installPatchedFile(_app!);
       if (isInstalled) {
-        update(1.0, 'Installed!', 'Installed');
+        update(1.0, 'Installed!', 'Installed!');
         _app!.patchDate = DateTime.now();
-        _app!.appliedPatches.addAll(_patches.map((p) => p.name).toList());
-        _managerAPI.savePatchedApp(_app!);
+        _app!.appliedPatches = _patches.map((p) => p.name).toList();
+        await _managerAPI.savePatchedApp(_app!);
       } else {
         update(1.0, 'Aborting...', 'An error occurred! Aborting');
       }

@@ -6,7 +6,17 @@ import 'package:timeago/timeago.dart';
 class GithubAPI {
   final GitHub _github = GitHub();
 
-  Future<String?> latestReleaseVersion(String org, repoName) async {
+  final Map<String, String> repoAppPath = {
+    'com.google.android.youtube': 'youtube',
+    'com.google.android.apps.youtube.music': 'music',
+    'com.twitter.android': 'twitter',
+    'com.reddit.frontpage': 'reddit',
+    'com.zhiliaoapp.musically': 'tiktok',
+    'de.dwd.warnapp': 'warnwetter',
+    'com.garzotto.pflotsh.ecmwf_a': 'ecmwf',
+  };
+
+  Future<String?> latestReleaseVersion(String org, String repoName) async {
     try {
       var latestRelease = await _github.repositories.getLatestRelease(
         RepositorySlug(org, repoName),
@@ -20,7 +30,7 @@ class GithubAPI {
   Future<File?> latestReleaseFile(
     String extension,
     String org,
-    repoName,
+    String repoName,
   ) async {
     try {
       var latestRelease = await _github.repositories.getLatestRelease(
@@ -42,7 +52,7 @@ class GithubAPI {
     return null;
   }
 
-  Future<String> latestCommitTime(String org, repoName) async {
+  Future<String> latestCommitTime(String org, String repoName) async {
     try {
       var repo = await _github.repositories.getRepository(
         RepositorySlug(org, repoName),
@@ -55,15 +65,25 @@ class GithubAPI {
     }
   }
 
-  Future<List<Contributor>> getContributors(String org, repoName) async {
+  Future<List<Contributor>> getContributors(String org, String repoName) async {
     return await (_github.repositories.listContributors(
       RepositorySlug(org, repoName),
     )).toList();
   }
 
-  Future<List<RepositoryCommit>> getCommits(String org, repoName) async {
-    return await (_github.repositories.listCommits(
-      RepositorySlug(org, repoName),
+  Future<List<RepositoryCommit>> getCommits(
+    String packageName,
+    String org,
+    String repoName,
+  ) async {
+    String path =
+        'src/main/kotlin/app/revanced/patches/${repoAppPath[packageName]}';
+    return await (PaginationHelper(_github)
+        .objects<Map<String, dynamic>, RepositoryCommit>(
+      'GET',
+      '/repos/$org/$repoName/commits',
+      (i) => RepositoryCommit.fromJson(i),
+      params: <String, dynamic>{'path': path},
     )).toList();
   }
 }
