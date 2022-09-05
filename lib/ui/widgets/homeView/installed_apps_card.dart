@@ -1,10 +1,12 @@
-import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:revanced_manager/app/app.locator.dart';
 import 'package:revanced_manager/models/patched_application.dart';
 import 'package:revanced_manager/ui/views/home/home_viewmodel.dart';
+import 'package:revanced_manager/ui/widgets/appInfoView/app_info_view.dart';
 import 'package:revanced_manager/ui/widgets/shared/application_item.dart';
+import 'package:revanced_manager/ui/widgets/shared/custom_card.dart';
+import 'package:revanced_manager/ui/widgets/shared/open_container_wrapper.dart';
 
 class InstalledAppsCard extends StatelessWidget {
   InstalledAppsCard({Key? key}) : super(key: key);
@@ -15,28 +17,18 @@ class InstalledAppsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return apps.isEmpty
-        ? Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        ? CustomCard(
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Icon(
-                    Icons.file_download_off,
-                    size: 40,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                  const Icon(Icons.file_download_off, size: 40),
                   const SizedBox(height: 16),
                   I18nText(
                     'homeView.noInstallations',
                     child: Text(
                       '',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary),
+                      style: Theme.of(context).textTheme.subtitle1!,
                     ),
                   )
                 ],
@@ -48,14 +40,19 @@ class InstalledAppsCard extends StatelessWidget {
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             children: apps
-                .map((app) => ApplicationItem(
+                .map(
+                  (app) => OpenContainerWrapper(
+                    openBuilder: (_, __) => AppInfoView(app: app),
+                    closedBuilder: (_, openContainer) => ApplicationItem(
                       icon: app.icon,
                       name: app.name,
                       patchDate: app.patchDate,
                       changelog: app.changelog,
                       isUpdatableApp: false,
-                      onPressed: () => DeviceApps.openApp(app.packageName),
-                    ))
+                      onPressed: openContainer,
+                    ),
+                  ),
+                )
                 .toList(),
           );
   }

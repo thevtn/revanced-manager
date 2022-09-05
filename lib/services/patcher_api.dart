@@ -14,9 +14,7 @@ import 'package:share_extend/share_extend.dart';
 
 @lazySingleton
 class PatcherAPI {
-  static const patcherChannel = MethodChannel(
-    'app.revanced.manager/patcher',
-  );
+  static const patcherChannel = MethodChannel('app.revanced.manager/patcher');
   final ManagerAPI _managerAPI = locator<ManagerAPI>();
   final RootAPI _rootAPI = RootAPI();
   late Directory _tmpDir;
@@ -148,7 +146,7 @@ class PatcherAPI {
   Future<bool> installPatchedFile(PatchedApplication patchedApp) async {
     if (_outFile != null) {
       try {
-        if (patchedApp.isRooted && !patchedApp.isFromStorage) {
+        if (patchedApp.isRooted) {
           return _rootAPI.installApp(
             patchedApp.packageName,
             patchedApp.apkFilePath,

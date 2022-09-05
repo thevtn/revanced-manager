@@ -69,7 +69,9 @@ class InstallerViewModel extends BaseViewModel {
   }
 
   void update(double value, String header, String log) {
-    progress = value;
+    if (value > 0) {
+      progress = value;
+    }
     isPatching = progress == 1.0 ? false : true;
     if (progress == 0.0) {
       logs = '';
@@ -99,7 +101,7 @@ class InstallerViewModel extends BaseViewModel {
     if (_app != null && _patches.isNotEmpty) {
       String apkFilePath = _app!.apkFilePath;
       try {
-        if (_app!.isRooted && !_app!.isFromStorage) {
+        if (_app!.isRooted) {
           update(0.0, '', 'Checking if an old patched version exists');
           bool oldExists = await _patcherAPI.checkOldPatch(_app!);
           if (oldExists) {

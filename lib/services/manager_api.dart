@@ -49,8 +49,28 @@ class ManagerAPI {
     return packageInfo.version;
   }
 
+  bool getUseDynamicTheme() {
+    return _prefs.getBool('useDynamicTheme') ?? false;
+  }
+
+  Future<void> setUseDynamicTheme(bool value) async {
+    await _prefs.setBool('useDynamicTheme', value);
+  }
+
+  bool getUseDarkTheme() {
+    return _prefs.getBool('useDarkTheme') ?? false;
+  }
+
+  Future<void> setUseDarkTheme(bool value) async {
+    await _prefs.setBool('useDarkTheme', value);
+  }
+
   bool? isRooted() {
     return _prefs.getBool('isRooted');
+  }
+
+  Future<void> setIsRooted(bool value) async {
+    await _prefs.setBool('isRooted', value);
   }
 
   List<PatchedApplication> getPatchedApps() {
@@ -82,12 +102,18 @@ class ManagerAPI {
     await setPatchedApps(patchedApps);
   }
 
+  Future<void> deletePatchedApp(PatchedApplication app) async {
+    List<PatchedApplication> patchedApps = getPatchedApps();
+    patchedApps.removeWhere((a) => a.packageName == app.packageName);
+    await setPatchedApps(patchedApps);
+  }
+
   Future<void> reAssessSavedApps() async {
-    bool isRoot = isRooted() ?? false;
+    bool isRooted = this.isRooted() ?? false;
     List<PatchedApplication> patchedApps = getPatchedApps();
     List<PatchedApplication> toRemove = [];
     for (PatchedApplication app in patchedApps) {
-      bool isRemove = await isAppUninstalled(app, isRoot);
+      bool isRemove = await isAppUninstalled(app, isRooted);
       if (isRemove) {
         toRemove.add(app);
       } else {
@@ -113,9 +139,9 @@ class ManagerAPI {
     await setPatchedApps(patchedApps);
   }
 
-  Future<bool> isAppUninstalled(PatchedApplication app, bool isRoot) async {
+  Future<bool> isAppUninstalled(PatchedApplication app, bool isRooted) async {
     bool existsRoot = false;
-    if (isRoot) {
+    if (isRooted) {
       existsRoot = await _rootAPI.isAppInstalled(app.packageName);
     }
     bool existsNonRoot = await DeviceApps.isAppInstalled(app.packageName);
