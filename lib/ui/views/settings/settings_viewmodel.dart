@@ -18,8 +18,8 @@ class SettingsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void navigateToRootChecker() {
-    _navigationService.navigateTo(Routes.rootCheckerView);
+  void navigateToContributors() {
+    _navigationService.navigateTo(Routes.contributorsView);
   }
 
   Future<void> updateLanguage(BuildContext context, String? value) async {
