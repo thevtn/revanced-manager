@@ -27,7 +27,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(48),
         color: Theme.of(context).colorScheme.secondaryContainer,
       ),
       child: Row(
@@ -36,6 +36,9 @@ class _SearchBarState extends State<SearchBar> {
             child: TextFormField(
               onChanged: widget.onQueryChanged,
               controller: _textController,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -43,7 +46,7 @@ class _SearchBarState extends State<SearchBar> {
                 hintText: widget.hintText,
                 prefixIcon: Icon(
                   Icons.search,
-                  color: Theme.of(context).iconTheme.color,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 suffixIcon: _textController.text.isNotEmpty
                     ? IconButton(
@@ -69,7 +72,7 @@ class _SearchBarState extends State<SearchBar> {
                           )
                         : null,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(100),
                   borderSide: BorderSide.none,
                 ),
               ),

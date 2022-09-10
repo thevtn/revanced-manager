@@ -24,12 +24,46 @@ class DynamicThemeBuilder extends StatelessWidget {
       builder: (lightColorScheme, darkColorScheme) {
         ThemeData lightDynamicTheme = ThemeData(
           useMaterial3: true,
+          canvasColor: lightColorScheme?.background,
+          navigationBarTheme: NavigationBarThemeData(
+            backgroundColor: lightColorScheme?.background,
+            indicatorColor: lightColorScheme?.primary.withAlpha(150),
+            labelTextStyle: MaterialStateProperty.all(
+              GoogleFonts.roboto(
+                color: lightColorScheme?.secondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            iconTheme: MaterialStateProperty.all(
+              IconThemeData(
+                color: lightColorScheme?.secondary,
+              ),
+            ),
+          ),
+          scaffoldBackgroundColor: lightColorScheme?.background,
           colorScheme: lightColorScheme?.harmonized(),
           toggleableActiveColor: lightColorScheme?.primary,
           textTheme: GoogleFonts.robotoTextTheme(ThemeData.light().textTheme),
         );
         ThemeData darkDynamicTheme = ThemeData(
           useMaterial3: true,
+          canvasColor: darkColorScheme?.background,
+          navigationBarTheme: NavigationBarThemeData(
+            backgroundColor: darkColorScheme?.background,
+            indicatorColor: darkColorScheme?.primary.withOpacity(0.4),
+            labelTextStyle: MaterialStateProperty.all(
+              GoogleFonts.roboto(
+                color: darkColorScheme?.secondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            iconTheme: MaterialStateProperty.all(
+              IconThemeData(
+                color: darkColorScheme?.secondary,
+              ),
+            ),
+          ),
+          scaffoldBackgroundColor: darkColorScheme?.background,
           colorScheme: darkColorScheme?.harmonized(),
           toggleableActiveColor: darkColorScheme?.primary,
           textTheme: GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme),
@@ -42,7 +76,7 @@ class DynamicThemeBuilder extends StatelessWidget {
               2: lightDynamicTheme,
               3: darkDynamicTheme,
             },
-            fallbackTheme: lightCustomTheme,
+            fallbackTheme: darkCustomTheme,
           ),
           builder: (context, theme) => MaterialApp(
             debugShowCheckedModeBanner: false,

@@ -37,13 +37,14 @@ class PatchItem extends StatefulWidget {
 class _PatchItemState extends State<PatchItem> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        setState(() => widget.isSelected = !widget.isSelected);
-        widget.onChanged(widget.isSelected);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          setState(() => widget.isSelected = !widget.isSelected);
+          widget.onChanged(widget.isSelected);
+        },
         child: CustomCard(
           child: Column(
             children: <Widget>[
@@ -84,6 +85,12 @@ class _PatchItemState extends State<PatchItem> {
                     child: Checkbox(
                       value: widget.isSelected,
                       activeColor: Theme.of(context).colorScheme.primary,
+                      checkColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      side: BorderSide(
+                        width: 2.0,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       onChanged: (newValue) {
                         setState(() => widget.isSelected = newValue!);
                         widget.onChanged(widget.isSelected);
@@ -109,7 +116,7 @@ class _PatchItemState extends State<PatchItem> {
                                   side: BorderSide(
                                     width: 1,
                                     color:
-                                        Theme.of(context).colorScheme.primary,
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ),
@@ -117,7 +124,7 @@ class _PatchItemState extends State<PatchItem> {
                                 Colors.transparent,
                               ),
                               foregroundColor: MaterialStateProperty.all(
-                                Theme.of(context).colorScheme.primary,
+                                Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -137,9 +144,10 @@ class _PatchItemState extends State<PatchItem> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: I18nText('patchItem.alertDialogTitle'),
+        title: I18nText('patchItem.unsupportedDialogTitle'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         content: I18nText(
-          'patchItem.alertDialogText',
+          'patchItem.unsupportedDialogText',
           translationParams: {
             'packageVersion': widget.packageVersion,
             'supportedVersions':
@@ -152,7 +160,6 @@ class _PatchItemState extends State<PatchItem> {
             onPressed: () => Navigator.of(context).pop(),
           )
         ],
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
     );
   }

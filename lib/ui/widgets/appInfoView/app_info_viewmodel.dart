@@ -45,23 +45,24 @@ class AppInfoViewModel extends BaseViewModel {
       return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: I18nText('appInfoView.alertDialogTitle'),
-          content: I18nText('appInfoView.errorDialogText'),
+          title: I18nText('appInfoView.rootDialogTitle'),
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          content: I18nText('appInfoView.rootDialogText'),
           actions: [
             CustomMaterialButton(
               label: I18nText('okButton'),
               onPressed: () => Navigator.of(context).pop(),
             )
           ],
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         ),
       );
     } else {
       return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: I18nText('appInfoView.alertDialogTitle'),
-          content: I18nText('appInfoView.alertDialogText'),
+          title: I18nText('appInfoView.uninstallDialogTitle'),
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          content: I18nText('appInfoView.uninstallDialogText'),
           actions: [
             CustomMaterialButton(
               isFilled: false,
@@ -78,7 +79,6 @@ class AppInfoViewModel extends BaseViewModel {
               },
             )
           ],
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         ),
       );
     }
@@ -102,6 +102,7 @@ class AppInfoViewModel extends BaseViewModel {
       context: context,
       builder: (context) => AlertDialog(
         title: I18nText('appInfoView.appliedPatchesLabel'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         content: Text(getAppliedPatchesString(app.appliedPatches)),
         actions: [
           CustomMaterialButton(
@@ -109,7 +110,6 @@ class AppInfoViewModel extends BaseViewModel {
             onPressed: () => Navigator.of(context).pop(),
           )
         ],
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
     );
   }
