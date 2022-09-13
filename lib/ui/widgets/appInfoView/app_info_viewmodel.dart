@@ -7,6 +7,7 @@ import 'package:revanced_manager/models/patched_application.dart';
 import 'package:revanced_manager/services/manager_api.dart';
 import 'package:revanced_manager/services/patcher_api.dart';
 import 'package:revanced_manager/services/root_api.dart';
+import 'package:revanced_manager/ui/views/home/home_viewmodel.dart';
 import 'package:revanced_manager/ui/views/navigation/navigation_viewmodel.dart';
 import 'package:revanced_manager/ui/views/patcher/patcher_viewmodel.dart';
 import 'package:revanced_manager/ui/widgets/installerView/custom_material_button.dart';
@@ -48,7 +49,7 @@ class AppInfoViewModel extends BaseViewModel {
           title: I18nText('appInfoView.rootDialogTitle'),
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           content: I18nText('appInfoView.rootDialogText'),
-          actions: [
+          actions: <Widget>[
             CustomMaterialButton(
               label: I18nText('okButton'),
               onPressed: () => Navigator.of(context).pop(),
@@ -63,7 +64,7 @@ class AppInfoViewModel extends BaseViewModel {
           title: I18nText('appInfoView.uninstallDialogTitle'),
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           content: I18nText('appInfoView.uninstallDialogText'),
-          actions: [
+          actions: <Widget>[
             CustomMaterialButton(
               isFilled: false,
               label: I18nText('cancelButton'),
@@ -73,7 +74,7 @@ class AppInfoViewModel extends BaseViewModel {
               label: I18nText('okButton'),
               onPressed: () {
                 uninstallApp(app);
-                locator<NavigationViewModel>().notifyListeners();
+                locator<HomeViewModel>().initialize(context);
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
@@ -104,7 +105,7 @@ class AppInfoViewModel extends BaseViewModel {
         title: I18nText('appInfoView.appliedPatchesLabel'),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         content: Text(getAppliedPatchesString(app.appliedPatches)),
-        actions: [
+        actions: <Widget>[
           CustomMaterialButton(
             label: I18nText('okButton'),
             onPressed: () => Navigator.of(context).pop(),

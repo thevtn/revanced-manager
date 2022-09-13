@@ -15,7 +15,7 @@ class AppSkeletonLoader extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8.0),
           child: SkeletonItem(
             child: Row(
-              children: [
+              children: <Widget>[
                 SkeletonAvatar(
                   style: SkeletonAvatarStyle(
                     width: screenWidth * 0.15,
@@ -27,10 +27,10 @@ class AppSkeletonLoader extends StatelessWidget {
                 const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Container(
                       color: Colors.white,
-                      height: 25,
+                      height: 34,
                       width: screenWidth * 0.4,
                       child: SkeletonParagraph(
                         style: const SkeletonParagraphStyle(
@@ -42,7 +42,7 @@ class AppSkeletonLoader extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(bottom: 4),
                       color: Colors.white,
-                      height: 25,
+                      height: 34,
                       width: screenWidth * 0.6,
                       child: SkeletonParagraph(
                         style: const SkeletonParagraphStyle(
@@ -58,7 +58,7 @@ class AppSkeletonLoader extends StatelessWidget {
         ),
       ),
       child: const Center(
-        child: Text("Content"),
+        child: Text('Content'),
       ),
     );
   }

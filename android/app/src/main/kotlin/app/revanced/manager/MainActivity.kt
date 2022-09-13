@@ -1,13 +1,13 @@
-package app.revanced.manager
+package app.revanced.manager.flutter
 
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
-import app.revanced.manager.utils.Aapt
-import app.revanced.manager.utils.aligning.ZipAligner
-import app.revanced.manager.utils.signing.Signer
-import app.revanced.manager.utils.zip.ZipFile
-import app.revanced.manager.utils.zip.structures.ZipEntry
+import app.revanced.manager.flutter.utils.Aapt
+import app.revanced.manager.flutter.utils.aligning.ZipAligner
+import app.revanced.manager.flutter.utils.signing.Signer
+import app.revanced.manager.flutter.utils.zip.ZipFile
+import app.revanced.manager.flutter.utils.zip.structures.ZipEntry
 import app.revanced.patcher.Patcher
 import app.revanced.patcher.PatcherOptions
 import app.revanced.patcher.extensions.PatchExtensions.patchName
@@ -18,12 +18,10 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 
 class MainActivity : FlutterActivity() {
-    private val PATCHER_CHANNEL = "app.revanced.manager/patcher"
-    private val INSTALLER_CHANNEL = "app.revanced.manager/installer"
+    private val PATCHER_CHANNEL = "app.revanced.manager.flutter/patcher"
+    private val INSTALLER_CHANNEL = "app.revanced.manager.flutter/installer"
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var installerChannel: MethodChannel
 
@@ -127,11 +125,7 @@ class MainActivity : FlutterActivity() {
                                         )
                                 )
                             }
-                            Files.copy(
-                                    originalFile.toPath(),
-                                    inputFile.toPath(),
-                                    StandardCopyOption.REPLACE_EXISTING
-                            )
+                            originalFile.copyTo(inputFile, true)
 
                             handler.post {
                                 installerChannel.invokeMethod(

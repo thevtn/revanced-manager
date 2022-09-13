@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +100,7 @@ class SettingsViewModel extends BaseViewModel {
       context: context,
       builder: (context) => AlertDialog(
         title: Row(
-          children: [
+          children: <Widget>[
             I18nText('settingsView.sourcesLabel'),
             const Spacer(),
             IconButton(
@@ -161,7 +160,7 @@ class SettingsViewModel extends BaseViewModel {
             ],
           ),
         ),
-        actions: [
+        actions: <Widget>[
           CustomMaterialButton(
             isFilled: false,
             label: I18nText('cancelButton'),
@@ -197,7 +196,7 @@ class SettingsViewModel extends BaseViewModel {
         title: I18nText('settingsView.sourcesResetDialogTitle'),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         content: I18nText('settingsView.sourcesResetDialogText'),
-        actions: [
+        actions: <Widget>[
           CustomMaterialButton(
             isFilled: false,
             label: I18nText('cancelButton'),

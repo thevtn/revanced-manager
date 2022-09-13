@@ -37,30 +37,30 @@ class _PatchesSelectorViewState extends State<PatchesSelectorView> {
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
-            child: model.patches.isEmpty
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                : Column(
-                    children: <Widget>[
-                      SearchBar(
-                        showSelectIcon: true,
-                        hintText: FlutterI18n.translate(
-                          context,
-                          'patchesSelectorView.searchBarHint',
-                        ),
-                        onQueryChanged: (searchQuery) {
-                          setState(() {
-                            _query = searchQuery;
-                          });
-                        },
-                        onSelectAll: (value) => model.selectAllPatches(value),
-                      ),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: ListView(
+            child: Column(
+              children: <Widget>[
+                SearchBar(
+                  showSelectIcon: true,
+                  hintText: FlutterI18n.translate(
+                    context,
+                    'patchesSelectorView.searchBarHint',
+                  ),
+                  onQueryChanged: (searchQuery) {
+                    setState(() {
+                      _query = searchQuery;
+                    });
+                  },
+                  onSelectAll: (value) => model.selectAllPatches(value),
+                ),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: model.patches.isEmpty
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
+                      : ListView(
                           padding: const EdgeInsets.only(bottom: 80),
                           children: model
                               .getQueriedPatches(_query)
@@ -88,7 +88,7 @@ class _PatchesSelectorViewState extends State<PatchesSelectorView> {
                                         tapHeaderToExpand: true,
                                       ),
                                       header: Column(
-                                        children: [
+                                        children: <Widget>[
                                           GestureDetector(
                                             onLongPress: () =>
                                                 expController.toggle(),
@@ -138,18 +138,18 @@ class _PatchesSelectorViewState extends State<PatchesSelectorView> {
                                                 BorderRadius.circular(12),
                                           ),
                                           child: Column(
-                                            children: [
+                                            children: <Widget>[
                                               Text(
-                                                "Patch options",
+                                                'Patch options',
                                                 style: GoogleFonts.inter(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                               const OptionsTextField(
-                                                  hint: "App name"),
+                                                  hint: 'App name'),
                                               const OptionsFilePicker(
-                                                optionName: "Choose a logo",
+                                                optionName: 'Choose a logo',
                                               ),
                                             ],
                                           ),
@@ -160,9 +160,9 @@ class _PatchesSelectorViewState extends State<PatchesSelectorView> {
                               )
                               .toList(),
                         ),
-                      ),
-                    ],
-                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

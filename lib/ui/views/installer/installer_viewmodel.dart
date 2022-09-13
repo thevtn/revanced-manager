@@ -10,6 +10,7 @@ import 'package:revanced_manager/services/manager_api.dart';
 import 'package:revanced_manager/services/patcher_api.dart';
 import 'package:revanced_manager/ui/views/patcher/patcher_viewmodel.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wakelock/wakelock.dart';
 
 class InstallerViewModel extends BaseViewModel {
   final ManagerAPI _managerAPI = locator<ManagerAPI>();
@@ -17,7 +18,7 @@ class InstallerViewModel extends BaseViewModel {
   final PatchedApplication _app = locator<PatcherViewModel>().selectedApp!;
   final List<Patch> _patches = locator<PatcherViewModel>().selectedPatches;
   static const _installerChannel = MethodChannel(
-    'app.revanced.manager/installer',
+    'app.revanced.manager.flutter/installer',
   );
   final ScrollController scrollController = ScrollController();
   double? progress = 0.0;
@@ -25,6 +26,7 @@ class InstallerViewModel extends BaseViewModel {
   String headerLogs = '';
   bool isPatching = true;
   bool isInstalled = false;
+  bool hasErrors = false;
 
   Future<void> initialize(BuildContext context) async {
     try {
@@ -46,10 +48,12 @@ class InstallerViewModel extends BaseViewModel {
         ),
       );
       await FlutterBackground.enableBackgroundExecution();
-    } finally {
-      await handlePlatformChannelMethods();
-      await runPatcher();
+      await Wakelock.enable();
+    } on Exception {
+      // ignore
     }
+    await handlePlatformChannelMethods();
+    await runPatcher();
   }
 
   Future<dynamic> handlePlatformChannelMethods() async {
@@ -76,6 +80,7 @@ class InstallerViewModel extends BaseViewModel {
     if (progress == 0.0) {
       logs = '';
       isInstalled = false;
+      hasErrors = false;
     }
     if (header.isNotEmpty) {
       headerLogs = header;
@@ -112,16 +117,20 @@ class InstallerViewModel extends BaseViewModel {
         update(0.0, '', 'Creating working directory');
         await _patcherAPI.runPatcher(_app.packageName, apkFilePath, _patches);
       } on Exception {
+        hasErrors = true;
         update(1.0, 'Aborting...', 'An error occurred! Aborting');
       }
     } else {
+      hasErrors = true;
       update(1.0, 'Aborting...', 'No app or patches selected! Aborting');
     }
     try {
       await FlutterBackground.disableBackgroundExecution();
-    } finally {
-      isPatching = false;
+      await Wakelock.disable();
+    } on Exception {
+      // ignore
     }
+    isPatching = false;
   }
 
   void installResult(bool installAsRoot) async {
@@ -139,8 +148,6 @@ class InstallerViewModel extends BaseViewModel {
       _app.patchDate = DateTime.now();
       _app.appliedPatches = _patches.map((p) => p.name).toList();
       await _managerAPI.savePatchedApp(_app);
-    } else {
-      update(1.0, 'Aborting...', 'An error occurred! Aborting');
     }
   }
 
