@@ -23,7 +23,7 @@
         "notificationTitle": "ReVanced Manager was updated!",
         "notificationText": "Tap to open the app",
         "downloadingMessage": "Downloading update!",
-        "installingMessage": "Installing update!",
+        "installingMessage": "Installing update... Hang on!",
         "errorDownloadMessage": "Unable to download update!",
         "errorInstallMessage": "Unable to download update!",
         "noConnection": "No internet connection"
@@ -108,8 +108,10 @@
         "sourcesResetDialogText": "Are you sure you want to reset custom sources to their default values?",
         "contributorsLabel": "Contributors",
         "contributorsHint": "A list of contributors of ReVanced",
+        "logsLabel": "Logs",
+        "logsHint": "Share device debug logs",
         "aboutLabel": "About",
-        "versionLabel": "Version"
+        "snackbarMessage": "Copied to clipboard"
     },
     "appInfoView": {
         "widgetTitle": "App Info",

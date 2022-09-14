@@ -28,8 +28,7 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val mainChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, PATCHER_CHANNEL)
-        installerChannel =
-                MethodChannel(flutterEngine.dartExecutor.binaryMessenger, INSTALLER_CHANNEL)
+        installerChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, INSTALLER_CHANNEL)
         mainChannel.setMethodCallHandler { call, result ->
             when (call.method) {
                 "runPatcher" -> {
@@ -133,7 +132,7 @@ class MainActivity : FlutterActivity() {
                                         mapOf(
                                                 "progress" to 0.2,
                                                 "header" to "Unpacking apk...",
-                                                "log" to "Unpacking copied apk"
+                                                "log" to "Unpacking input apk"
                                         )
                                 )
                             }

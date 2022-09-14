@@ -82,6 +82,20 @@ class PatcherAPI {
         .toList();
   }
 
+  Future<String> getOriginalFilePath(
+    String packageName,
+    String originalFilePath,
+  ) async {
+    bool hasRootPermissions = await _rootAPI.hasRootPermissions();
+    if (hasRootPermissions) {
+      originalFilePath = await _rootAPI.getOriginalFilePath(
+        packageName,
+        originalFilePath,
+      );
+    }
+    return originalFilePath;
+  }
+
   Future<void> runPatcher(
     String packageName,
     String originalFilePath,
@@ -127,7 +141,10 @@ class PatcherAPI {
         'runPatcher',
         {
           'patchBundleFilePath': patchBundleFile.path,
-          'originalFilePath': originalFilePath,
+          'originalFilePath': await getOriginalFilePath(
+            packageName,
+            originalFilePath,
+          ),
           'inputFilePath': inputFile.path,
           'patchedFilePath': patchedFile.path,
           'outFilePath': _outFile!.path,
@@ -153,8 +170,6 @@ class PatcherAPI {
               patchedApp.apkFilePath,
               _outFile!.path,
             );
-          } else {
-            return false;
           }
         } else {
           await AppInstaller.installApk(_outFile!.path);
@@ -179,20 +194,18 @@ class PatcherAPI {
     }
   }
 
-  Future<bool> checkOldPatch(PatchedApplication patchedApp) async {
-    if (patchedApp.isRooted) {
-      return await _rootAPI.isAppInstalled(patchedApp.packageName);
-    }
-    return false;
-  }
-
-  Future<void> deleteOldPatch(PatchedApplication patchedApp) async {
-    if (patchedApp.isRooted) {
-      await _rootAPI.deleteApp(patchedApp.packageName, patchedApp.apkFilePath);
-    }
-  }
-
-  void shareLog(String logs) {
-    ShareExtend.share(logs, 'text');
+  Future<void> sharePatcherLog(String logs) async {
+    Directory appCache = await getTemporaryDirectory();
+    Directory logDir = Directory('${appCache.path}/logs');
+    logDir.createSync();
+    String dateTime = DateTime.now()
+        .toIso8601String()
+        .replaceAll('-', '')
+        .replaceAll(':', '')
+        .replaceAll('T', '')
+        .replaceAll('.', '');
+    File log = File('${logDir.path}/revanced-manager_patcher_$dateTime.log');
+    log.writeAsStringSync(logs);
+    ShareExtend.share(log.path, 'file');
   }
 }
